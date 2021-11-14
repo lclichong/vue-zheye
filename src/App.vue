@@ -5,25 +5,22 @@
         <form>
             <div class="mb-3">
                 <label class="form-label">邮箱地址</label>
-                <validata-input :rules="emailRules"></validata-input>
+                <validata-input
+                    v-model="emailVal"
+                    :rules="emailRules"
+                    placeholder="请输入邮箱地址"
+                    type="text"
+                ></validata-input>
             </div>
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">邮箱地址</label>
-                <input
-                    v-model="emailRef.val"
-                    @blur="vaildataEmail"
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                />
-                <div class="form-text" v-if="emailRef.error">
-                    {{ emailRef.message }}
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">密码</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" />
+                <label class="form-label">密码</label>
+                <validata-input
+                    v-model="passwordVal"
+                    :rules="passwordRules"
+                    placeholder="请输入密码"
+                    type="password"
+                    autocomplete="off"
+                ></validata-input>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
@@ -31,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ValidataInput, { RulesProp } from './components/VaildateInput.vue'
 import ColumnList, { ColumnProps } from './components/ColumnList.vue'
@@ -77,6 +74,7 @@ export default defineComponent({
         ValidataInput
     },
     setup() {
+        const emailVal = ref('')
         const emailRules: RulesProp = [
             {
                 type: 'required',
@@ -87,27 +85,20 @@ export default defineComponent({
                 message: '请输入正确的电子邮箱地址'
             }
         ]
-        const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-        const emailRef = reactive({
-            val: '',
-            error: false,
-            message: ''
-        })
-        const vaildataEmail = () => {
-            if (emailRef.val.trim() === '') {
-                emailRef.error = true
-                emailRef.message = '不能为空'
-            } else if (!emailReg.test(emailRef.val)) {
-                emailRef.error = true
-                emailRef.message = '邮箱格式不正确'
+        const passwordVal = ref('')
+        const passwordRules: RulesProp = [
+            {
+                type: 'required',
+                message: '密码不能为空'
             }
-        }
+        ]
         return {
             list: testData,
             currentUser,
-            emailRef,
-            vaildataEmail,
-            emailRules
+            emailVal,
+            emailRules,
+            passwordVal,
+            passwordRules
         }
     }
 })
