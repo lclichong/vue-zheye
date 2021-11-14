@@ -19,8 +19,16 @@ import { defineComponent, reactive, PropType } from 'vue'
 
 const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 interface RuleProp {
-    type: 'required' | 'email'
-    message: string
+    type: 'required' | 'email' | 'range'
+    message?: string
+    min?: {
+        message: string
+        length: number
+    }
+    max?: {
+        message: string
+        length: number
+    }
 }
 export type RulesProp = RuleProp[]
 
@@ -46,13 +54,25 @@ export default defineComponent({
             if (props.rules) {
                 const allPassed = props.rules.every((rule) => {
                     let passed = true
-                    inputRef.message = rule.message
+                    if (rule.message) {
+                        inputRef.message = rule.message
+                    }
                     switch (rule.type) {
                         case 'required':
                             passed = inputRef.val.trim() !== ''
                             break
                         case 'email':
                             passed = emailReg.test(inputRef.val.trim())
+                            break
+                        case 'range':
+                            if (rule.min) {
+                                passed = !inputRef.val.includes(' ') && inputRef.val.length >= rule.min.length
+                                inputRef.message = rule.min.message
+                            }
+                            if ((rule.max && passed) || (rule.max && inputRef.val.length > rule.max.length)) {
+                                passed = !inputRef.val.includes(' ') && inputRef.val.length <= rule.max.length
+                                inputRef.message = rule.max.message
+                            }
                             break
                         default:
                             break
@@ -62,9 +82,6 @@ export default defineComponent({
                 inputRef.error = !allPassed
             }
         }
-        // if (props.modelValue) {
-        //     vaildataInput()
-        // }
         return {
             inputRef,
             vaildataInput,

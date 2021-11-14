@@ -87,9 +87,11 @@ export default defineComponent({
         ]
         const passwordVal = ref('')
         const passwordRules: RulesProp = [
+            { type: 'required', message: '密码不能为空' },
             {
-                type: 'required',
-                message: '密码不能为空'
+                type: 'range',
+                min: { message: '你的密码至少包括六位，不能含有空格', length: 6 },
+                max: { message: '你的密码不能超过二十位，不能含有空格', length: 20 }
             }
         ]
         return {
