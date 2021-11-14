@@ -35,7 +35,7 @@ export interface UserProps {
 }
 
 export default defineComponent({
-    name: '',
+    name: 'GlobalHeader',
     components: {
         Dropdown,
         DropdownItem
