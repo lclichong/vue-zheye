@@ -2,40 +2,41 @@
     <div class="container">
         <global-header :user="currentUser"></global-header>
         <!-- <column-list :list="list"></column-list> -->
-        <vaildate-form @form-submit="onFormSubmit">
+        <validate-form @form-submit="onFormSubmit">
             <div class="mb-3">
                 <label class="form-label">邮箱地址</label>
-                <vaildate-input
+                <validate-input
                     v-model="emailVal"
                     :rules="emailRules"
                     placeholder="请输入邮箱地址"
                     type="text"
-                ></vaildate-input>
+                    ref="inputRef"
+                ></validate-input>
             </div>
             <div class="mb-3">
                 <label class="form-label">密码</label>
-                <vaildate-input
+                <validate-input
                     v-model="passwordVal"
                     :rules="passwordRules"
                     placeholder="请输入密码"
                     type="password"
                     autocomplete="off"
-                ></vaildate-input>
+                ></validate-input>
             </div>
             <template #submit>
                 <span class="btn btn-danger">submit</span>
             </template>
-        </vaildate-form>
+        </validate-form>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import VaildateInput, { RulesProp } from './components/VaildateInput.vue'
+import ValidateInput, { RulesProp } from './components/ValidateInput.vue'
 import ColumnList, { ColumnProps } from './components/ColumnList.vue'
 import GlobalHeader, { UserProps } from './components/GlobalHeader.vue'
-import VaildateForm from './components/VaildateForm.vue'
+import ValidateForm from './components/ValidateForm.vue'
 
 const currentUser: UserProps = {
     isLogin: true,
@@ -74,10 +75,11 @@ export default defineComponent({
     components: {
         // ColumnList,
         GlobalHeader,
-        VaildateInput,
-        VaildateForm
+        ValidateInput,
+        ValidateForm
     },
     setup() {
+        const inputRef = ref<any>()
         const emailVal = ref('')
         const emailRules: RulesProp = [
             {
@@ -108,7 +110,7 @@ export default defineComponent({
             }
         ]
         const onFormSubmit = (result: boolean) => {
-            console.log(result)
+            console.log('result', result)
         }
         return {
             list: testData,
@@ -117,7 +119,8 @@ export default defineComponent({
             emailRules,
             passwordVal,
             passwordRules,
-            onFormSubmit
+            onFormSubmit,
+            inputRef
         }
     }
 })
