@@ -2,37 +2,40 @@
     <div class="container">
         <global-header :user="currentUser"></global-header>
         <!-- <column-list :list="list"></column-list> -->
-        <form>
+        <vaildate-form @form-submit="onFormSubmit">
             <div class="mb-3">
                 <label class="form-label">邮箱地址</label>
-                <validata-input
+                <vaildate-input
                     v-model="emailVal"
                     :rules="emailRules"
                     placeholder="请输入邮箱地址"
                     type="text"
-                ></validata-input>
+                ></vaildate-input>
             </div>
             <div class="mb-3">
                 <label class="form-label">密码</label>
-                <validata-input
+                <vaildate-input
                     v-model="passwordVal"
                     :rules="passwordRules"
                     placeholder="请输入密码"
                     type="password"
                     autocomplete="off"
-                ></validata-input>
+                ></vaildate-input>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+            <template #submit>
+                <span class="btn btn-danger">submit</span>
+            </template>
+        </vaildate-form>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import ValidataInput, { RulesProp } from './components/VaildateInput.vue'
+import VaildateInput, { RulesProp } from './components/VaildateInput.vue'
 import ColumnList, { ColumnProps } from './components/ColumnList.vue'
 import GlobalHeader, { UserProps } from './components/GlobalHeader.vue'
+import VaildateForm from './components/VaildateForm.vue'
 
 const currentUser: UserProps = {
     isLogin: true,
@@ -71,7 +74,8 @@ export default defineComponent({
     components: {
         // ColumnList,
         GlobalHeader,
-        ValidataInput
+        VaildateInput,
+        VaildateForm
     },
     setup() {
         const emailVal = ref('')
@@ -87,20 +91,33 @@ export default defineComponent({
         ]
         const passwordVal = ref('')
         const passwordRules: RulesProp = [
-            { type: 'required', message: '密码不能为空' },
+            {
+                type: 'required',
+                message: '密码不能为空'
+            },
             {
                 type: 'range',
-                min: { message: '你的密码至少包括六位，不能含有空格', length: 6 },
-                max: { message: '你的密码不能超过二十位，不能含有空格', length: 20 }
+                min: {
+                    message: '你的密码至少包括六位，不能含有空格',
+                    length: 6
+                },
+                max: {
+                    message: '你的密码不能超过二十位，不能含有空格',
+                    length: 20
+                }
             }
         ]
+        const onFormSubmit = (result: boolean) => {
+            console.log(result)
+        }
         return {
             list: testData,
             currentUser,
             emailVal,
             emailRules,
             passwordVal,
-            passwordRules
+            passwordRules,
+            onFormSubmit
         }
     }
 })
