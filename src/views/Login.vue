@@ -1,0 +1,90 @@
+<template>
+    <div class="login-page">
+        <validate-form @form-submit="onFormSubmit">
+            <div class="mb-3">
+                <label class="form-label">邮箱地址</label>
+                <validate-input
+                    v-model="emailVal"
+                    :rules="emailRules"
+                    placeholder="请输入邮箱地址"
+                    type="text"
+                ></validate-input>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">密码</label>
+                <validate-input
+                    v-model="passwordVal"
+                    :rules="passwordRules"
+                    placeholder="请输入密码"
+                    type="password"
+                    autocomplete="off"
+                ></validate-input>
+            </div>
+            <template #submit>
+                <span class="btn btn-danger">submit</span>
+            </template>
+        </validate-form>
+    </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import ValidateForm from '../components/ValidateForm.vue'
+import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
+
+export default defineComponent({
+    name: 'App',
+    components: {
+        ValidateInput,
+        ValidateForm
+    },
+    setup() {
+        const router = useRouter()
+        const emailVal = ref('')
+        const emailRules: RulesProp = [
+            {
+                type: 'required',
+                message: '电子邮箱地址不能为空'
+            },
+            {
+                type: 'email',
+                message: '请输入正确的电子邮箱地址'
+            }
+        ]
+        const passwordVal = ref('')
+        const passwordRules: RulesProp = [
+            {
+                type: 'required',
+                message: '密码不能为空'
+            },
+            {
+                type: 'range',
+                min: {
+                    message: '你的密码至少包括六位，不能含有空格',
+                    length: 6
+                },
+                max: {
+                    message: '你的密码不能超过二十位，不能含有空格',
+                    length: 20
+                }
+            }
+        ]
+        const onFormSubmit = (result: boolean) => {
+            if (result) {
+                router.push({ name: 'column', params: { id: 1 } })
+            }
+        }
+        return {
+            emailVal,
+            emailRules,
+            passwordVal,
+            passwordRules,
+            onFormSubmit
+        }
+    }
+})
+</script>
+
+<style>
+</style>
