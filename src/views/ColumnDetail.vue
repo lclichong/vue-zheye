@@ -14,21 +14,22 @@
 </template>
 
  <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
+import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import { testData, testPosts } from '../testData'
 import PostList from '../components/PostList.vue'
+import { GlobalDataProps } from '../store/index'
 
 export default defineComponent({
     components: {
         PostList
     },
     setup() {
+        const store = useStore<GlobalDataProps>()
         const route = useRoute()
         const currentId = +route.params.id
-        const column = testData.find((c) => c.id === currentId)
-        console.log(column)
-        const list = testPosts.filter((post) => post.columnId === currentId)
+        const column = computed(() => store.getters.getColumnById(currentId))
+        const list = computed(() => store.getters.getPostsByCid(currentId))
         return {
             column,
             list
