@@ -10,7 +10,7 @@
                 <validate-input v-model="passwordVal" :rules="passwordRules" placeholder="请输入密码" type="password" autocomplete="off"></validate-input>
             </div>
             <template #submit>
-                <span class="btn btn-danger">submit</span>
+                <button type="submit" class="btn btn-primary btn-block btn-large">登录</button>
             </template>
         </validate-form>
     </div>
@@ -22,6 +22,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import ValidateForm from '../components/ValidateForm.vue'
 import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
+import createMessage from '../components/createMessage'
 
 export default defineComponent({
     name: 'App',
@@ -67,10 +68,17 @@ export default defineComponent({
                     email: emailVal.value,
                     password: passwordVal.value
                 }
-                store.dispatch('loginAndFetch', payload).then((data) => {
-                    console.log(data)
-                    router.push({ path: '/' })
-                })
+                store
+                    .dispatch('loginAndFetch', payload)
+                    .then(() => {
+                        createMessage('登录成功 2秒后跳转首页', 'success')
+                        setTimeout(() => {
+                            router.push('/')
+                        }, 2000)
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
             }
         }
         return {

@@ -12,7 +12,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted } from 'vue'
+import { defineComponent } from 'vue'
+import useDOMCreate from '../hooks/useDOMCreate'
 
 export default defineComponent({
     props: {
@@ -24,19 +25,14 @@ export default defineComponent({
         }
     },
     setup() {
-        const node = document.createElement('div')
-        node.id = 'back'
-        document.body.appendChild(node)
-        onUnmounted(() => {
-            document.body.removeChild(node)
-        })
+        useDOMCreate('back')
     }
 })
 </script>
 
 <style scoped>
-.loading-container{
-    background: rgba(255,255,255,.5);
+.loading-container {
+    background: rgba(255, 255, 255, 0.5);
     z-index: 100;
     position: fixed;
     width: 100%;
@@ -46,6 +42,6 @@ export default defineComponent({
 }
 
 .loading-container {
-  text-align: center;
+    text-align: center;
 }
 </style>

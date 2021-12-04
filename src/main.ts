@@ -7,6 +7,7 @@ import store from './store'
 axios.defaults.baseURL = 'https://apis.imooc.com/api/'
 axios.interceptors.request.use(config => {
   store.commit('setLoading', true)
+  store.commit('setError', { status: false, message: '' })
   // get 请求，添加到 url 中
   config.params = { ...config.params, icode: 'E332FC6EEB092675' }
   // 其他请求，添加到 body 中
@@ -19,12 +20,20 @@ axios.interceptors.request.use(config => {
   }
   return config
 })
-axios.interceptors.response.use(config => {
-  setTimeout(() => {
+axios.interceptors.response.use(
+  config => {
+    setTimeout(() => {
+      store.commit('setLoading', false)
+    }, 1000)
+    return config
+  },
+  e => {
+    const { error } = e.response.data
+    store.commit('setError', { status: true, message: error })
     store.commit('setLoading', false)
-  }, 1000)
-  return config
-})
+    return Promise.reject(error)
+  }
+)
 
 createApp(App)
   .use(store)

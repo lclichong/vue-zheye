@@ -3,11 +3,7 @@ module.exports = {
   env: {
     node: true
   },
-  extends: [
-    'plugin:vue/vue3-essential',
-    '@vue/standard',
-    '@vue/typescript/recommended'
-  ],
+  extends: ['plugin:vue/vue3-essential', '@vue/standard', '@vue/typescript/recommended'],
   parserOptions: {
     ecmaVersion: 2020
   },
@@ -16,6 +12,8 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     indent: ['off', 4],
     'space-before-function-paren': 'off',
-    'eslint-disable-next-line': 'off'
+    'eslint-disable-next-line': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off'
   }
 }

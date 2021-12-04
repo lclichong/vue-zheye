@@ -28,7 +28,12 @@ export interface PostProps {
   createdAt: string
   column: string
 }
+export interface GlobalErrorProps {
+  status: boolean
+  message?: string
+}
 export interface GlobalDataProps {
+  error: GlobalErrorProps
   token: string
   loading: boolean
   columns: ColumnProps[]
@@ -36,22 +41,13 @@ export interface GlobalDataProps {
   user: UserProps
 }
 
-const getAndCommit = async (
-  url: string,
-  mutationName: string,
-  commit: Commit
-) => {
+const getAndCommit = async (url: string, mutationName: string, commit: Commit) => {
   const { data } = await axios.get(url)
   commit(mutationName, data)
   return data
 }
 
-const postAndCommit = async (
-  url: string,
-  mutationName: string,
-  commit: Commit,
-  payload: any
-) => {
+const postAndCommit = async (url: string, mutationName: string, commit: Commit, payload: any) => {
   const { data } = await axios.post(url, payload)
   commit(mutationName, data)
   return data
@@ -59,6 +55,7 @@ const postAndCommit = async (
 
 export default createStore<GlobalDataProps>({
   state: {
+    error: { status: false },
     token: localStorage.getItem('token') || '',
     loading: false,
     columns: [] as ColumnProps[],
@@ -82,6 +79,9 @@ export default createStore<GlobalDataProps>({
     },
     setLoading(state, status) {
       state.loading = status
+    },
+    setError(state, e: GlobalErrorProps) {
+      state.error = e
     },
     login(state, rawData) {
       const { token } = rawData.data

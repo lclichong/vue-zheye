@@ -43,8 +43,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
-    .rounded-circle{
-        width: 225px;
-        height: 225px;
-    }
+.rounded-circle {
+    width: 225px;
+    height: 225px;
+}
 </style>
