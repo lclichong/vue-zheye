@@ -3,22 +3,11 @@
         <validate-form @form-submit="onFormSubmit">
             <div class="mb-3">
                 <label class="form-label">邮箱地址</label>
-                <validate-input
-                    v-model="emailVal"
-                    :rules="emailRules"
-                    placeholder="请输入邮箱地址"
-                    type="text"
-                ></validate-input>
+                <validate-input v-model="emailVal" :rules="emailRules" placeholder="请输入邮箱地址" type="text"></validate-input>
             </div>
             <div class="mb-3">
                 <label class="form-label">密码</label>
-                <validate-input
-                    v-model="passwordVal"
-                    :rules="passwordRules"
-                    placeholder="请输入密码"
-                    type="password"
-                    autocomplete="off"
-                ></validate-input>
+                <validate-input v-model="passwordVal" :rules="passwordRules" placeholder="请输入密码" type="password" autocomplete="off"></validate-input>
             </div>
             <template #submit>
                 <span class="btn btn-danger">submit</span>
@@ -74,8 +63,14 @@ export default defineComponent({
         ]
         const onFormSubmit = (result: boolean) => {
             if (result) {
-                store.commit('Login')
-                router.push({ path: '/' })
+                const payload = {
+                    email: emailVal.value,
+                    password: passwordVal.value
+                }
+                store.dispatch('loginAndFetch', payload).then((data) => {
+                    console.log(data)
+                    router.push({ path: '/' })
+                })
             }
         }
         return {
@@ -89,5 +84,4 @@ export default defineComponent({
 })
 </script>
 
-<style>
-</style>
+<style></style>
