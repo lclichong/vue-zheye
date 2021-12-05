@@ -1,5 +1,5 @@
 <template>
-  <div class="login-page p-3">
+  <div class="login-page py-3">
     <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
