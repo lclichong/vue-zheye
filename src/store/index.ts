@@ -94,6 +94,12 @@ export default createStore<GlobalDataProps>({
         isLogin: true,
         ...rawData.data
       }
+    },
+    signOut(state) {
+      state.user = {
+        isLogin: false
+      }
+      localStorage.removeItem('token')
     }
   },
   actions: {

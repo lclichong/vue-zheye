@@ -1,27 +1,25 @@
 <template>
-    <div class="validate-input-container pb-3">
-        <input
-            v-if="tag !== 'textarea'"
-            :value="inputRef.val"
-            class="form-control"
-            :class="{ 'is-invalid': inputRef.error }"
-            @blur="validataInput"
-            @input="updateValue"
-            v-bind="$attrs"
-        />
-        <textarea
-            v-else
-            class="form-control"
-            :class="{ 'is-invalid': inputRef.error }"
-            :value="inputRef.val"
-            @blur="validataInput"
-            @input="updateValue"
-            v-bind="$attrs"
-        ></textarea>
-        <span v-if="inputRef.error" class="invalid-feedback">
-            {{ inputRef.message }}
-        </span>
-    </div>
+  <div class="validate-input-container pb-3">
+    <input
+      v-if="tag !== 'textarea'"
+      :value="inputRef.val"
+      class="form-control"
+      :class="{ 'is-invalid': inputRef.error }"
+      @blur="validataInput"
+      @input="updateValue"
+      v-bind="$attrs"
+    />
+    <textarea
+      v-else
+      class="form-control"
+      :class="{ 'is-invalid': inputRef.error }"
+      :value="inputRef.val"
+      @blur="validataInput"
+      @input="updateValue"
+      v-bind="$attrs"
+    ></textarea>
+    <span v-if="inputRef.error" class="invalid-feedback">{{ inputRef.message }}</span>
+  </div>
 </template>
 
 <script lang="ts">
@@ -30,7 +28,7 @@ import { emitter } from './ValidateForm.vue'
 
 const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 interface RuleProp {
-    type: 'required' | 'email' | 'range'
+    type: 'required' | 'email' | 'range' | 'custom'
     message?: string
     min?: {
         message: string
@@ -40,6 +38,7 @@ interface RuleProp {
         message: string
         length: number
     }
+    validator?: () => boolean
 }
 export type RulesProp = RuleProp[]
 export type TagType = 'input' | 'textarea'
@@ -61,7 +60,7 @@ export default defineComponent({
             error: false,
             message: ''
         })
-        const updateValue = (e: KeyboardEvent) => {
+        const updateValue = (e: KeyboardEvent | Event) => {
             const targetValue = (e.target as HTMLInputElement).value
             inputRef.val = targetValue
             context.emit('update:modelValue', targetValue)
@@ -89,6 +88,9 @@ export default defineComponent({
                                 passed = !inputRef.val.includes(' ') && inputRef.val.length <= rule.max.length
                                 inputRef.message = rule.max.message
                             }
+                            break
+                        case 'custom':
+                            passed = rule.validator ? rule.validator() : true
                             break
                         default:
                             break

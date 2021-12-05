@@ -1,19 +1,25 @@
 <template>
-    <div class="login-page">
-        <validate-form @form-submit="onFormSubmit">
-            <div class="mb-3">
-                <label class="form-label">邮箱地址</label>
-                <validate-input v-model="emailVal" :rules="emailRules" placeholder="请输入邮箱地址" type="text"></validate-input>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">密码</label>
-                <validate-input v-model="passwordVal" :rules="passwordRules" placeholder="请输入密码" type="password" autocomplete="off"></validate-input>
-            </div>
-            <template #submit>
-                <button type="submit" class="btn btn-primary btn-block btn-large">登录</button>
-            </template>
-        </validate-form>
-    </div>
+  <div class="login-page p-3">
+    <validate-form @form-submit="onFormSubmit">
+      <div class="mb-3">
+        <label class="form-label">邮箱地址</label>
+        <validate-input v-model="emailVal" :rules="emailRules" placeholder="请输入邮箱地址" type="text"></validate-input>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">密码</label>
+        <validate-input
+          v-model="passwordVal"
+          :rules="passwordRules"
+          placeholder="请输入密码"
+          type="password"
+          autocomplete="off"
+        ></validate-input>
+      </div>
+      <template #submit>
+        <button type="submit" class="btn btn-primary btn-block btn-large">登录</button>
+      </template>
+    </validate-form>
+  </div>
 </template>
 
 <script lang="ts">
