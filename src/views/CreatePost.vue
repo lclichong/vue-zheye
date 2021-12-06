@@ -1,27 +1,44 @@
 <template>
-  <div class="create-post-page py-3">
-    <h4>新建文章</h4>
-    <validate-form @form-submit="onFormSubmit">
-      <div class="mb-3">
-        <label class="form-label">文章标题：</label>
-        <validate-input :rules="titleRules" v-model="titleVal" placeholder="请输入文章标题" type="text" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">文章详情：</label>
-        <validate-input
-          type="text"
-          tag="textarea"
-          rows="10"
-          placeholder="请输入文章详情"
-          :rules="contentRules"
-          v-model="contentVal"
-        />
-      </div>
-      <template #submit>
-        <button class="btn btn-primary btn-large">创建</button>
-      </template>
-    </validate-form>
-  </div>
+    <div class="create-post-page py-3">
+        <h4>新建文章</h4>
+        <uploader
+            action="/upload"
+            class="d-flex align-items-center justify-content-center bg-light text-secondary w-100 my-4"
+        >
+            <h2>点击上传头图</h2>
+            <template #loading>
+                <div class="d-flex">
+                    <div class="spinner-border text-secondary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <h2>正在上传</h2>
+                </div>
+            </template>
+            <template #uploaded="dataProps">
+                <img :src="dataProps.uploadedData.data.url" />
+            </template>
+        </uploader>
+        <validate-form @form-submit="onFormSubmit">
+            <div class="mb-3">
+                <label class="form-label">文章标题：</label>
+                <validate-input :rules="titleRules" v-model="titleVal" placeholder="请输入文章标题" type="text" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">文章详情：</label>
+                <validate-input
+                    type="text"
+                    tag="textarea"
+                    rows="10"
+                    placeholder="请输入文章详情"
+                    :rules="contentRules"
+                    v-model="contentVal"
+                />
+            </div>
+            <template #submit>
+                <button class="btn btn-primary btn-large">创建</button>
+            </template>
+        </validate-form>
+    </div>
 </template>
 
 <script lang="ts">
@@ -31,12 +48,14 @@ import { useRouter } from 'vue-router'
 import { GlobalDataProps, PostProps } from '../store/index'
 import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
 import ValidateForm from '../components/ValidateForm.vue'
+import Uploader from '../components/Uploader.vue'
 
 export default defineComponent({
     name: 'CreatePost',
     components: {
         ValidateInput,
-        ValidateForm
+        ValidateForm,
+        Uploader
     },
     setup() {
         const titleVal = ref('')
@@ -71,3 +90,16 @@ export default defineComponent({
     }
 })
 </script>
+
+<style>
+.create-post-page .file-upload-container {
+    height: 200px;
+    cursor: pointer;
+}
+
+.create-post-page .file-upload-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+</style>

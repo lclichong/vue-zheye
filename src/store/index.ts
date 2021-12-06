@@ -101,10 +101,12 @@ export default createStore<GlobalDataProps>({
       }
     },
     signOut(state) {
+      state.token = ''
+      localStorage.removeItem('token')
       state.user = {
         isLogin: false
       }
-      localStorage.removeItem('token')
+      delete axios.defaults.headers.common.Authorization
     }
   },
   actions: {
