@@ -32,6 +32,8 @@ export interface PostProps {
   image?: ImageProps
   createdAt: string
   column: string
+  avatar?: ImageProps
+  description?: string
 }
 export interface GlobalErrorProps {
   status: boolean
@@ -82,6 +84,9 @@ export default createStore<GlobalDataProps>({
     fetchPosts(state, rawData) {
       state.posts = rawData.data.list
     },
+    fetchPost(state, rawData) {
+      state.posts = [rawData.data]
+    },
     setLoading(state, status) {
       state.loading = status
     },
@@ -119,6 +124,9 @@ export default createStore<GlobalDataProps>({
     fetchPosts({ commit }, cid) {
       return getAndCommit(`/columns/${cid}/posts`, 'fetchPosts', commit)
     },
+    fetchPost({ commit }, id) {
+      return getAndCommit(`/posts/${id}`, 'fetchPost', commit)
+    },
     fetchCurrentUser({ commit }) {
       return getAndCommit('/user/current', 'fetchCurrentUser', commit)
     },
@@ -138,6 +146,9 @@ export default createStore<GlobalDataProps>({
     },
     getPostsByCid: state => (cid: string) => {
       return state.posts.filter(post => post.column === cid)
+    },
+    getCurrentPost: state => (id: string) => {
+      return state.posts.find(post => post._id === id)
     }
   }
 })

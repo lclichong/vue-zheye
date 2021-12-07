@@ -2,7 +2,9 @@
     <div class="post-list">
         <article v-for="post in list" :key="post._id" class="card mb-3 shadow-sm">
             <div class="card-body">
-                <h4>{{ post.title }}</h4>
+                <router-link class="text-decoration-none" :to="`/posts/${post._id}`">
+                    <h4>{{ post.title }}</h4>
+                </router-link>
                 <div class="row my-3 align-items-center">
                     <div v-if="post.image" class="col-3">
                         <img :src="post.image && post.image.url" :alt="post.title" class="rounded-lg w-100" />
@@ -27,7 +29,7 @@ export default defineComponent({
         }
     },
     setup(props) {
-const columnList = computed(() => {
+        const columnList = computed(() => {
             return props.list.map((post) => {
                 if (!post.image) {
                     post.image = {
@@ -47,7 +49,7 @@ const columnList = computed(() => {
 </script>
 
 <style scoped>
-    .card-body img{
-        height: 111.45px;
-    }
+.card-body img {
+    height: 111.45px;
+}
 </style>
