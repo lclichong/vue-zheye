@@ -6,17 +6,20 @@ export interface ResponseType<P = Record<string, never>> {
   msg: string
   data: P
 }
+export interface ImageProps {
+  _id?: string
+  url?: string
+  createdAt?: string
+  fitUrl?: string
+}
 export interface UserProps {
   isLogin: boolean
   nickName?: string
   _id?: string
   column?: string
   email?: string
-}
-export interface ImageProps {
-  _id?: string
-  url?: string
-  createdAt?: string
+  avatar?: ImageProps
+  description?: string
 }
 export interface ColumnProps {
   _id: string
@@ -25,23 +28,22 @@ export interface ColumnProps {
   description: string
 }
 export interface PostProps {
-  _id: string
+  _id?: string
   title: string
   excerpt?: string
   content?: string
-  image?: ImageProps
-  createdAt: string
+  image?: ImageProps | string
+  createdAt?: string
   column: string
-  avatar?: ImageProps
-  description?: string
+  author?: string
 }
 export interface GlobalErrorProps {
   status: boolean
   message?: string
 }
 export interface GlobalDataProps {
-  error: GlobalErrorProps
   token: string
+  error: GlobalErrorProps
   loading: boolean
   columns: ColumnProps[]
   posts: PostProps[]

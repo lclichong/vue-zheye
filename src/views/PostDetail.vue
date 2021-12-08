@@ -9,7 +9,12 @@
             />
             <h2 class="mb-4">{{ currentPost.title }}</h2>
             <div class="user-profile-component border-top border-bottom py-3 mb-5 align-items-center row g-0">
-                <div class="col"></div>
+                <div class="col">
+                    <user-profile
+                        :user="currentPost.author"
+                        v-if="typeof currentPost.author === 'object'"
+                    ></user-profile>
+                </div>
                 <span class="text-muted col text-right font-italic">发表于：{{ currentPost.createdAt }}</span>
             </div>
             <div v-html="currentHTML"></div>
@@ -23,9 +28,13 @@ import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import MarkdownIt from 'markdown-it'
 import { GlobalDataProps, PostProps, ImageProps } from '../store'
+import UserProfile from '../components/UserProfile.vue'
 
 export default defineComponent({
     name: 'post-detail',
+    components: {
+        UserProfile
+    },
     setup() {
         const route = useRoute()
         const store = useStore<GlobalDataProps>()
@@ -42,7 +51,6 @@ export default defineComponent({
                 return null
             }
         })
-        console.log(currentHTML.value)
         const currentImageUrl = computed(() => {
             if (currentPost.value && currentPost.value.image) {
                 const { image } = currentPost.value
