@@ -35,7 +35,7 @@ export interface PostProps {
   image?: ImageProps | string
   createdAt?: string
   column: string
-  author?: string
+  author?: string | UserProps
 }
 export interface GlobalErrorProps {
   status: boolean
@@ -117,8 +117,8 @@ export default createStore<GlobalDataProps>({
     }
   },
   actions: {
-    fetchColumns({ commit }) {
-      return getAndCommit('/columns', 'fetchColumns', commit)
+    fetchColumns({ commit }, data) {
+      return getAndCommit(`/columns?currentPage=${data.page}&pageSize=${data.size}`, 'fetchColumns', commit)
     },
     fetchColumn({ commit }, cid) {
       return getAndCommit(`/columns/${cid}`, 'fetchColumn', commit)
