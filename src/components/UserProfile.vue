@@ -14,6 +14,7 @@
 import { defineComponent, computed, PropType } from 'vue'
 import { UserProps } from '../store'
 import { addColumnAvatar } from '../helper'
+
 export default defineComponent({
     props: {
         user: {
