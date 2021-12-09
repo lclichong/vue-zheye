@@ -1,6 +1,6 @@
 <template>
     <div class="create-post-page py-3">
-        <h4>新建文章</h4>
+        <h4>{{ isEditMode ? '编辑文章' : '新建文章' }}</h4>
         <uploader
             action="/upload"
             @file-uploaded="handleFileUploaded"
@@ -40,7 +40,7 @@
                 />
             </div>
             <template #submit>
-                <button class="btn btn-primary btn-large">发布文章</button>
+                <button class="btn btn-primary btn-large">{{ isEditMode ? '更新文章' : '发表文章' }}</button>
             </template>
         </validate-form>
     </div>
@@ -55,7 +55,6 @@ import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
 import ValidateForm from '../components/ValidateForm.vue'
 import Uploader from '../components/Uploader.vue'
 import createMessage from '../components/createMessage'
-import axios from 'axios'
 
 export default defineComponent({
     name: 'CreatePost',
@@ -105,7 +104,14 @@ export default defineComponent({
                     if (imageId) {
                         newPost.image = imageId
                     }
-                    axios.post('/posts', newPost).then(() => {
+                    const actionName = isEditMode ? 'updatePost' : 'createPost'
+                    const sendData = isEditMode
+                        ? {
+                              id: route.query.id,
+                              payload: newPost
+                          }
+                        : newPost
+                    store.dispatch(actionName, sendData).then(() => {
                         createMessage('发表成功，2秒后跳转到文章', 'success', 2000)
                         setTimeout(() => {
                             router.push({ name: 'column', params: { id: column } })
@@ -121,7 +127,8 @@ export default defineComponent({
             contentRules,
             onFormSubmit,
             handleFileUploaded,
-            uploadedData
+            uploadedData,
+            isEditMode
         }
     }
 })
