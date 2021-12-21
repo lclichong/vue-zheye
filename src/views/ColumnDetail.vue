@@ -14,7 +14,7 @@
 </template>
 
  <script lang="ts">
-import { defineComponent, computed, onMounted, watch } from 'vue'
+import { defineComponent, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import PostList from '../components/PostList.vue'
@@ -33,11 +33,11 @@ export default defineComponent({
             store.dispatch('fetchColumn', currentId)
             store.dispatch('fetchPosts', currentId)
         })
-        const column = computed(() => store.getters.getColumnById(currentId))
-        const list = computed(() => store.getters.getPostsByCid(currentId))
-        watch(column, (newVal) => {
-            addColumnAvatar(newVal, 50, 50)
+        const column = computed(() => {
+            addColumnAvatar(store.getters.getColumnById(currentId), 50, 50)
+            return store.getters.getColumnById(currentId)
         })
+        const list = computed(() => store.getters.getPostsByCid(currentId))
         return {
             column,
             list
