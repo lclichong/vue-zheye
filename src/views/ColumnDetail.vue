@@ -10,6 +10,9 @@
             </div>
         </div>
         <post-list :list="list"></post-list>
+        <button v-if="!isLastPage" @click="loadMorePage" class="btn btn-outline-primary mt-2 mb-5 mx-auto w-25 d-block">
+            加载更多
+        </button>
     </div>
 </template>
 
@@ -20,6 +23,7 @@ import { useRoute } from 'vue-router'
 import PostList from '../components/PostList.vue'
 import { GlobalDataProps } from '../store/index'
 import { addColumnAvatar } from '../helper'
+import useLoadMore from '../hooks/useLoadMore'
 
 export default defineComponent({
     components: {
@@ -28,19 +32,40 @@ export default defineComponent({
     setup() {
         const store = useStore<GlobalDataProps>()
         const route = useRoute()
-        const currentId = route.params.id
+        const currentId = route.params.id as string
         onMounted(() => {
             store.dispatch('fetchColumn', currentId)
-            store.dispatch('fetchPosts', currentId)
+            store.dispatch('fetchPosts', { cid: currentId })
+        })
+        const total = computed(() => {
+            if (store.state.posts.loadedColumns[currentId]) {
+                return store.state.posts.loadedColumns[currentId].total
+            } else {
+                return 0
+            }
+        })
+        const currentPage = computed(() => {
+            if (store.state.posts.loadedColumns[currentId]) {
+                return store.state.posts.loadedColumns[currentId].currentPage
+            } else {
+                return 1
+            }
         })
         const column = computed(() => {
             addColumnAvatar(store.getters.getColumnById(currentId), 50, 50)
             return store.getters.getColumnById(currentId)
         })
         const list = computed(() => store.getters.getPostsByCid(currentId))
+        const { loadMorePage, isLastPage } = useLoadMore('fetchPosts', total, {
+            pageSize: 5,
+            currentPage: currentPage.value ? currentPage.value + 1 : 2,
+            cid: currentId
+        })
         return {
             column,
-            list
+            list,
+            loadMorePage,
+            isLastPage
         }
     }
 })
