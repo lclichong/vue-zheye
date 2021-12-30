@@ -7,7 +7,12 @@ import ColumnDetail from '../views/ColumnDetail.vue'
 import CreatePost from '../views/CreatePost.vue'
 import PostDetail from '../views/PostDetail.vue'
 import store from '../store'
-const routerHistory = createWebHistory('/vue-zheye/')
+
+let routerHistory = createWebHistory()
+if (process.env.NODE_ENV === 'production') {
+  routerHistory = createWebHistory('/vue-zheye/')
+}
+
 const router = createRouter({
   history: routerHistory,
   routes: [
