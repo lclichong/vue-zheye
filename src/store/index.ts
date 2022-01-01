@@ -157,7 +157,7 @@ export default createStore<GlobalDataProps>({
   },
   actions: {
     fetchColumns({ state, commit }, params = {}) {
-      const { currentPage = 1, pageSize = 5 } = params
+      const { currentPage = 1, pageSize = 6 } = params
       if (state.columns.currentPage < currentPage) {
         return asyncAndCommit(`/columns?currentPage=${currentPage}&pageSize=${pageSize}`, 'fetchColumns', commit)
       }

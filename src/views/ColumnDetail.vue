@@ -1,19 +1,17 @@
 <template>
-    <div class="column-detail-page w-75 mx-auto">
-        <div class="column-info row mb-4 border-bottom pb-4 align-items-center" v-if="column">
-            <div class="col-3 text-center">
-                <img :src="column.avatar.fitUrl" :alt="column.title" class="rounded-circle border w-100" />
-            </div>
-            <div class="col-9">
-                <h4>{{ column.title }}</h4>
-                <p class="text-muted">{{ column.description }}</p>
-            </div>
-        </div>
-        <post-list :list="list"></post-list>
-        <button v-if="!isLastPage" @click="loadMorePage" class="btn btn-outline-primary mt-2 mb-5 mx-auto w-25 d-block">
-            加载更多
-        </button>
+  <div class="column-detail-page w-690">
+    <div class="column-info row mb-4 border-bottom pb-4 align-items-center" v-if="column">
+      <div class="col-3 text-center">
+        <img :src="column.avatar.fitUrl" :alt="column.title" class="rounded-circle border w-100" />
+      </div>
+      <div class="col-9">
+        <h4>{{ column.title }}</h4>
+        <p class="text-muted">{{ column.description }}</p>
+      </div>
     </div>
+    <post-list :list="list"></post-list>
+    <button v-if="!isLastPage" @click="loadMorePage" class="btn btn-outline-primary mt-2 mb-5 mx-auto w-25 d-block">加载更多</button>
+  </div>
 </template>
 
  <script lang="ts">
@@ -71,9 +69,14 @@ export default defineComponent({
 })
 </script>
 
+<style>
+.w-690 {
+    width: 690px;
+    margin: 0 auto;
+}
+</style>
 <style scoped>
 .rounded-circle {
     width: 225px;
-    height: 225px;
 }
 </style>
