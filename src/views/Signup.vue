@@ -1,40 +1,40 @@
 <template>
-  <div class="signup-page mx-auto p-3 w-330">
-    <h5 class="my-4 text-center">注册者也账户</h5>
-    <validate-form @form-submit="onFormSubmit">
-      <div class="mb-3">
-        <label class="form-label">邮箱地址</label>
-        <validate-input :rules="emailRules" v-model="formData.email" placeholder="请输入邮箱地址" type="text" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">昵称</label>
-        <validate-input :rules="nameRules" v-model="formData.nickName" placeholder="请输入昵称" type="text" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">密码</label>
-        <validate-input
-          type="password"
-          placeholder="请输入密码"
-          :rules="passwordRules"
-          v-model="formData.password"
-          autocomplete="off"
-        />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">重复密码</label>
-        <validate-input
-          type="password"
-          placeholder="请再次密码"
-          :rules="repeatPasswordRules"
-          v-model="formData.repeatPassword"
-          autocomplete="off"
-        />
-      </div>
-      <template #submit>
-        <button type="submit" class="btn btn-primary btn-block btn-large">注册新用户</button>
-      </template>
-    </validate-form>
-  </div>
+    <div class="signup-page mx-auto p-3 w-330">
+        <h5 class="my-4 text-center">注册者也账户</h5>
+        <validate-form @form-submit="onFormSubmit">
+            <div class="mb-3">
+                <label class="form-label">邮箱地址</label>
+                <validate-input :rules="emailRules" v-model="formData.email" placeholder="请输入邮箱地址" type="text" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">昵称</label>
+                <validate-input :rules="nameRules" v-model="formData.nickName" placeholder="请输入昵称" type="text" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">密码</label>
+                <validate-input
+                    type="password"
+                    placeholder="请输入密码"
+                    :rules="passwordRules"
+                    v-model="formData.password"
+                    autocomplete="off"
+                />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">重复密码</label>
+                <validate-input
+                    type="password"
+                    placeholder="请再次密码"
+                    :rules="repeatPasswordRules"
+                    v-model="formData.repeatPassword"
+                    autocomplete="off"
+                />
+            </div>
+            <template #submit>
+                <button type="submit" class="btn btn-primary btn-large w-100">注册新用户</button>
+            </template>
+        </validate-form>
+    </div>
 </template>
 
 <script lang="ts">

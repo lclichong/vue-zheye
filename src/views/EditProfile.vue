@@ -1,31 +1,48 @@
 <template>
-  <div class="update-profile-page w-690">
-    <ul class="nav nav-tabs my-4">
-      <li class="nav-item">
-        <a href="#" :class="generateActiveClass('profile')" @click.prevent="switchTab('profile')">更新个人资料</a>
-      </li>
-      <li>
-        <a href="#" :class="generateActiveClass('column')" @click.prevent="switchTab('column')">更新专栏信息</a>
-      </li>
-    </ul>
-    <h4>编辑个人资料</h4>
-    <uploader
-      action="/upload"
-      class="d-flex align-items-center justify-content-center bg-light text-secondary circle mx-auto my-3"
-      :beforeUpload="commonUploadCheck"
-      :uploaded="uploadedData"
-      @file-uploaded="onFileUploaded"
-    >
-      <h3>点击上传头像</h3>
-    </uploader>
-    <validate-form ref="formRef" @form-submit="onFormSubmit">
-      <validate-input :rules="nameRules" placeholder="请输入名称" v-model="nameValue" type="text" />
-      <validate-input :rules="descRules" placeholder="请输入简介信息" v-model="descValue" rows="5" tag="textarea" />
-      <template #submit>
-        <button class="btn btn-primary btn-large">提交修改</button>
-      </template>
-    </validate-form>
-  </div>
+    <div class="update-profile-page w-690">
+        <ul class="nav nav-tabs my-4">
+            <li class="nav-item">
+                <a href="#" :class="generateActiveClass('profile')" @click.prevent="switchTab('profile')"
+                    >更新个人资料</a
+                >
+            </li>
+            <li>
+                <a href="#" :class="generateActiveClass('column')" @click.prevent="switchTab('column')">更新专栏信息</a>
+            </li>
+        </ul>
+        <h4>编辑个人资料</h4>
+        <uploader
+            action="/upload"
+            class="d-flex align-items-center justify-content-center bg-light text-secondary circle mx-auto my-3"
+            :beforeUpload="commonUploadCheck"
+            :uploaded="uploadedData"
+            @file-uploaded="onFileUploaded"
+        >
+            <template #uploaded="dataProps">
+                <img
+                    :src="
+                        dataProps.uploadedData
+                            ? dataProps.uploadedData.data.url + '?x-oss-process=image/resize,m_fill,h_200,w_200'
+                            : require('../assets/avatar.jpg')
+                    "
+                />
+            </template>
+            <h3>点击上传头像</h3>
+        </uploader>
+        <validate-form ref="formRef" @form-submit="onFormSubmit">
+            <validate-input :rules="nameRules" placeholder="请输入名称" v-model="nameValue" type="text" />
+            <validate-input
+                :rules="descRules"
+                placeholder="请输入简介信息"
+                v-model="descValue"
+                rows="5"
+                tag="textarea"
+            />
+            <template #submit>
+                <button class="btn btn-primary btn-large">提交修改</button>
+            </template>
+        </validate-form>
+    </div>
 </template>
 
 <script lang="ts">

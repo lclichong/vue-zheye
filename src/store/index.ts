@@ -153,6 +153,12 @@ export default createStore<GlobalDataProps>({
     },
     deletePost(state, { data }) {
       delete state.posts.data[data._id]
+    },
+    updateUser(state, { data }) {
+      state.user = { isLogin: true, ...data }
+    },
+    updateColumn(state, { data }) {
+      state.columns.data[data._id] = data
     }
   },
   actions: {
@@ -206,6 +212,12 @@ export default createStore<GlobalDataProps>({
     },
     deletePost({ commit }, id) {
       return asyncAndCommit(`/posts/${id}`, 'deletePost', commit, { method: 'delete' })
+    },
+    updateUser({ commit }, { id, payload }) {
+      return asyncAndCommit(`/user/${id}`, 'updateUser', commit, { method: 'patch', data: payload })
+    },
+    updateColumn({ commit }, { id, payload }) {
+      return asyncAndCommit(`/columns/${id}`, 'updateColumn', commit, { method: 'patch', data: payload })
     }
   },
   modules: {},
