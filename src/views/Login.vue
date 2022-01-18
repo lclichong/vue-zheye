@@ -20,6 +20,7 @@
                     autocomplete="off"
                 ></validate-input>
             </div>
+            <div class="form-text"><router-link to="/signup">还没有账户？去注册一个新的吧！</router-link></div>
             <template #submit>
                 <button type="submit" class="btn btn-primary btn-large w-100">登录</button>
             </template>

@@ -1,25 +1,31 @@
 <template>
-  <div class="column-detail-page w-690">
-    <div class="column-info row mb-4 border-bottom pb-4 align-items-center" v-if="column">
-      <div class="col-3 text-center">
-        <img :src="column.avatar.fitUrl" :alt="column.title" class="rounded-circle border w-100" />
-      </div>
-      <div class="col-9">
-        <h4>{{ column.title }}</h4>
-        <p class="text-muted">{{ column.description }}</p>
-      </div>
+    <div class="column-detail-page w-690">
+        <div class="column-info row mb-4 border-bottom pb-4 align-items-center" v-if="column">
+            <div class="col-3 text-center">
+                <img
+                    :src="column.avatar && column.avatar.fitUrl"
+                    :alt="column.title"
+                    class="rounded-circle border w-100"
+                />
+            </div>
+            <div class="col-9">
+                <h4>{{ column.title }}</h4>
+                <p class="text-muted">{{ column.description }}</p>
+            </div>
+        </div>
+        <post-list :list="list"></post-list>
+        <button v-if="!isLastPage" @click="loadMorePage" class="btn btn-outline-primary mt-2 mb-5 mx-auto w-25 d-block">
+            加载更多
+        </button>
     </div>
-    <post-list :list="list"></post-list>
-    <button v-if="!isLastPage" @click="loadMorePage" class="btn btn-outline-primary mt-2 mb-5 mx-auto w-25 d-block">加载更多</button>
-  </div>
 </template>
 
  <script lang="ts">
-import { defineComponent, computed, onMounted } from 'vue'
+import { defineComponent, computed, onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import PostList from '../components/PostList.vue'
-import { GlobalDataProps } from '../store/index'
+import { GlobalDataProps, ColumnProps } from '../store/index'
 import { addColumnAvatar } from '../helper'
 import useLoadMore from '../hooks/useLoadMore'
 
@@ -30,34 +36,39 @@ export default defineComponent({
     setup() {
         const store = useStore<GlobalDataProps>()
         const route = useRoute()
-        const currentId = route.params.id as string
+        // 为了让 computed 响应对应的变化，添加响应式对象
+        const currentId = ref(route.params.id)
         onMounted(() => {
-            store.dispatch('fetchColumn', currentId)
-            store.dispatch('fetchPosts', { cid: currentId })
+            store.dispatch('fetchColumn', currentId.value)
+            store.dispatch('fetchPosts', { cid: currentId.value })
         })
-        const total = computed(() => {
-            if (store.state.posts.loadedColumns[currentId]) {
-                return store.state.posts.loadedColumns[currentId].total
-            } else {
-                return 0
+        // 检测变化
+        watch(
+            () => route.params,
+            (toParams) => {
+                // 确保要变化的路径是进入到用户的专栏
+                if ((toParams && toParams.id) === store.state.user.column) {
+                    // 重新发送请求，在 store 中有对应的缓存设置
+                    store.dispatch('fetchColumn', toParams.id)
+                    store.dispatch('fetchPosts', toParams.id)
+                    // 重新赋值，这样 computed 会变化
+                    currentId.value = toParams.id
+                }
             }
-        })
-        const currentPage = computed(() => {
-            if (store.state.posts.loadedColumns[currentId]) {
-                return store.state.posts.loadedColumns[currentId].currentPage
-            } else {
-                return 1
-            }
-        })
+        )
+        const count = computed(() => store.getters.getPostsCountByCid(currentId.value))
+        const currentPage = computed(() => store.getters.getPostsCurrentPageByCid(currentId.value))
         const column = computed(() => {
-            addColumnAvatar(store.getters.getColumnById(currentId), 50, 50)
-            return store.getters.getColumnById(currentId)
+            const selectColumn = store.getters.getColumnById(currentId.value) as ColumnProps | undefined
+            if (selectColumn) {
+                addColumnAvatar(selectColumn, 100, 100)
+            }
+            return selectColumn
         })
-        const list = computed(() => store.getters.getPostsByCid(currentId))
-        const { loadMorePage, isLastPage } = useLoadMore('fetchPosts', total, {
-            pageSize: 5,
-            currentPage: currentPage.value ? currentPage.value + 1 : 2,
-            cid: currentId
+        const list = computed(() => store.getters.getPostsByCid(currentId.value))
+        const { loadMorePage, isLastPage } = useLoadMore('fetchPosts', count, {
+            currentPage: currentPage.value,
+            cid: currentId.value
         })
         return {
             column,

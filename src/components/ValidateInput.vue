@@ -1,5 +1,5 @@
 <template>
-    <div class="validate-input-container pb-3">
+    <div class="validate-input-container pb-3 position-relative">
         <input
             v-if="tag !== 'textarea'"
             class="form-control"
@@ -16,7 +16,7 @@
             v-model="inputRef.val"
             v-bind="$attrs"
         ></textarea>
-        <span v-if="inputRef.error" class="invalid-feedback">{{ inputRef.message }}</span>
+        <span v-if="inputRef.error" class="invalid-feedback position-absolute mt-1">{{ inputRef.message }}</span>
     </div>
 </template>
 
@@ -68,7 +68,7 @@ export default defineComponent({
                 const allPassed = props.rules.every((rule) => {
                     let passed = true
                     if (rule.message) {
-                        inputRef.message = rule.message
+                        inputRef.message = rule.message || ''
                     }
                     switch (rule.type) {
                         case 'required':
@@ -110,3 +110,9 @@ export default defineComponent({
     }
 })
 </script>
+
+<style>
+.validate-input-container .error-message {
+    bottom: -5px;
+}
+</style>

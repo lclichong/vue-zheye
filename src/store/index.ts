@@ -233,6 +233,20 @@ export default createStore<GlobalDataProps>({
     },
     getCurrentPost: state => (id: string) => {
       return state.posts.data[id]
+    },
+    getPostsCurrentPageByCid: state => (cid: string) => {
+      if (state.posts.loadedColumns[cid]) {
+        return state.posts.loadedColumns[cid].currentPage
+      } else {
+        return 0
+      }
+    },
+    getPostsCountByCid: state => (cid: string) => {
+      if (state.posts.loadedColumns[cid]) {
+        return state.posts.loadedColumns[cid].total
+      } else {
+        return 0
+      }
     }
   }
 })

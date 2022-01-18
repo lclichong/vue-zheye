@@ -29,6 +29,9 @@
                     v-model="formData.repeatPassword"
                     autocomplete="off"
                 />
+                <div class="form-text">
+                    <router-link to="/login">已经有账户了？去登录</router-link>
+                </div>
             </div>
             <template #submit>
                 <button type="submit" class="btn btn-primary btn-large w-100">注册新用户</button>
