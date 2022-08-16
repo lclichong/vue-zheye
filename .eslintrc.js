@@ -14,6 +14,8 @@ module.exports = {
     'space-before-function-paren': 'off',
     'eslint-disable-next-line': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off'
+    '@typescript-eslint/no-explicit-any': 'off',
+    'new-cap': 'off',
+    '@typescript-eslint/no-extra-semi': 'off'
   }
 }

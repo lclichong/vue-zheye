@@ -3,9 +3,10 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import './utils/listenerRequest.js'
 
 axios.defaults.baseURL = 'https://apis.imooc.com/api/'
-const icode = '5CD9BA5FE320CCAC'
+const icode = '8AD317DFC87CDE1E'
 axios.interceptors.request.use(config => {
   store.commit('setLoading', true)
   store.commit('setError', { status: false, message: '' })
@@ -29,6 +30,7 @@ axios.interceptors.response.use(
     return config
   },
   e => {
+    console.log('dsf', e)
     const { error } = e.response.data
     store.commit('setError', { status: true, message: error })
     store.commit('setLoading', false)
