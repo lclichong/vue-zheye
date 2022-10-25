@@ -3,10 +3,9 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import './utils/listenerRequest.js'
 
 axios.defaults.baseURL = 'https://apis.imooc.com/api/'
-const icode = '8AD317DFC87CDE1E'
+const icode = '8693FEC26A2C124E'
 axios.interceptors.request.use(config => {
   store.commit('setLoading', true)
   store.commit('setError', { status: false, message: '' })
